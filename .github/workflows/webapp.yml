@@ -12,11 +12,6 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Log in with Azure
-        uses: azure/login@v1
-        with:
-          creds: '${{ secrets.AZURE_CREDENTIALS }}'
-
       # Checkout the repo
       - uses: actions/checkout@main
 
@@ -29,6 +24,8 @@ jobs:
       # Run dotnet build and publish
       - name: dotnet build and publish
         working-directory: 'app'
+        with: # Set Azure credentials secret as an input
+          credentials: ${{ secrets.AZURE_CREDENTIALS }}
         run: |
           dotnet restore
           dotnet build --configuration Release
