@@ -6,4 +6,4 @@ Full setup instructions are available on the CloudLumberjack.com blog article: [
 
 ![image1](https://cloudlumberjack.com/assets/img/gh-approvals/notification1.png)
 
-update:1
+update:2
