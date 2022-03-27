@@ -8,18 +8,14 @@ on:
 env:
   DOTNET_VERSION: '3.1.404'
 
-
-jobs:
-  build-and-publish:
+jjobs:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-
-      - uses: azure/login@v1
+      - name: Log in with Azure
+        uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-    
-      - run: |
-        az webapp list --query "[?state=='Running']"
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
 
       # Checkout the repo
       - uses: actions/checkout@main
