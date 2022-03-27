@@ -9,7 +9,7 @@ env:
   DOTNET_VERSION: '3.1.404'
 
 jobs:
-  build-and-deploy:
+  build-and-publish:
     runs-on: ubuntu-latest
     steps:
       - name: Log in with Azure
