@@ -14,15 +14,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      # Checkout the repo
-      - uses: actions/checkout@main
-
       - uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
     
       - run: |
         az webapp list --query "[?state=='Running']"
+
+      # Checkout the repo
+      - uses: actions/checkout@main
 
       # Setup .NET Core SDK
       - name: Setup .NET Core
