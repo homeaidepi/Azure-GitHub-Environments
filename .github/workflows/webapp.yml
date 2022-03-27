@@ -38,9 +38,9 @@ jobs:
           name: published-app
           path: './app/published-app'
 
-  deploy-dev:
+  deploy-preprod:
     runs-on: 'ubuntu-latest'
-    environment: 'dev'
+    environment: 'pre-prod'
     needs: build-and-publish
     steps:
 
@@ -55,27 +55,27 @@ jobs:
       - name: Deploy to Azure WebApp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: app-cloudlumberjack-dev
+          app-name: Azure-DotNet-Dev-Alpha
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: './published-app'
 
-  deploy-prod:
-    runs-on: 'ubuntu-latest'
-    environment: 'prod'
-    needs: [build-and-publish, deploy-dev]
-    steps:
+  # deploy-prod:
+  #   runs-on: 'ubuntu-latest'
+  #   environment: 'prod'
+  #   needs: [build-and-publish, deploy-dev]
+  #   steps:
 
-      # Download published artifact
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: published-app
-          path: './published-app'
+  #     # Download published artifact
+  #     - name: Download artifact
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: published-app
+  #         path: './published-app'
 
-      # Deploy to web app
-      - name: Deploy to Azure WebApp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: app-cloudlumberjack-prod
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: './published-app'
+  #     # Deploy to web app
+  #     - name: Deploy to Azure WebApp
+  #       uses: azure/webapps-deploy@v2
+  #       with:
+  #         app-name: Azure-DotNet-Prod-Alpha
+  #         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+  #         package: './published-app'
