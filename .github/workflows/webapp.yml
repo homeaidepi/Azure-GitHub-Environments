@@ -61,7 +61,7 @@ jobs:
       - name: Send chat ops msg to teams
         uses: dhollerbach/actions.send-message-to-ms-teams@1.0.10
         with:
-          webhook: 'https://netorgft990687.webhook.office.com/webhookb2/d6f78962-a701-4aca-acbe-eba8b2f6c495@09236181-1e84-46fb-8df5-bbeab6fdab36/IncomingWebhook/9ed7f8e64a7d43aa835fac2abc3cdb2d/9a3703c7-a380-4065-a784-1df2c8001a23'
+          webhook: ${{ secrets.TEAMS_WEBHOOK }}'
           message: 'Deployment Completed for commit: ${{ github.sha }}'
 
   # deploy-prod:
