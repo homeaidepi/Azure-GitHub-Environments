@@ -81,7 +81,6 @@ jobs:
         with:
           token_format: "access_token"
           create_credentials_file: true
-          activate_credentials_file: true
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_POOL_ID }}
           service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
       - name: Set up Cloud SDK
