@@ -82,7 +82,7 @@ jobs:
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
       - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0.3.0
+        uses: 'google-github-actions/setup-gcloud@v0'
       - name: Create API bundle from apiproxy
         run: zip -r proxy.zip . -i apiproxy
       - name: Upload API Proxy Bundle
