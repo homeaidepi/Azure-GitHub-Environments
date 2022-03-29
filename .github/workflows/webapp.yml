@@ -88,9 +88,9 @@ jobs:
         run: zip -r proxy.zip . -i apiproxy
       - name: Upload API Proxy Bundle
         id: upload
-        run: "echo \"::set-output name=apigee-revision::$(curl --fail -X POST -H \"Content-Type: multipart/form-data\" -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\" -F \"file=@proxy.zip\" \"https://apigee.googleapis.com/v1/organizations/${{secrets.APIGEE_ORG}}/apis?action=import&name=hello-world\" --silent | jq --raw-output .revision)\""
+        run: "echo \"::set-output name=apigee-revision::$(curl --fail -X POST -H \"Content-Type: multipart/form-data\" -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\" -F \"file=@proxy.zip\" \"https://apigee.googleapis.com/v1/organizations/${{secrets.GCP_APIGEE_ORG}}/apis?action=import&name=hello-world\" --silent | jq --raw-output .revision)\""
       - name: Deploy Revision
-        run: "curl --fail -X POST -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\" \"https://apigee.googleapis.com/v1/organizations/${{ secrets.GCP_APIGEE_ORG }}/environments/eval/apis/hello-world/revisions/${{steps.upload.outputs.apigee-revision}}/deployments?override=true\""
+        run: "curl --fail -X POST -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\" \"https://apigee.googleapis.com/v1/organizations/${{secrets.GCP_APIGEE_ORG}}/environments/eval/apis/hello-world/revisions/${{steps.upload.outputs.apigee-revision}}/deployments?override=true\""
       - name: Send chat ops notification to teams
         uses: dhollerbach/actions.send-message-to-ms-teams@1.0.10
         with:
