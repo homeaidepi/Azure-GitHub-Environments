@@ -9,8 +9,8 @@ env:
   DOTNET_VERSION: '3.1.404'
 
 jobs:
-  name: "Build .NET Core and Publish PoC Alpha"
   build-and-publish:
+    name: "Build .NET Core and Publish PoC Alpha"
     runs-on: ubuntu-latest
     steps:
       # Checkout the repo
@@ -38,8 +38,8 @@ jobs:
           path: './app/published-app'
           credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
-  name: "Deploy to PreProd Env PoC Alpha"
   deploy-preprod:
+    name: "Deploy to PreProd Env PoC Alpha"
     runs-on: 'ubuntu-latest'
     environment: 'PreProd'
     needs: build-and-publish
@@ -65,6 +65,35 @@ jobs:
         with:
           webhook: ${{ secrets.TEAMS_WEBHOOK }}
           message: 'Deployment Completed for commit: ${{ github.sha }}'
+  
+  deploy-apigee-gcp:
+    name: "Provision ApiGee on GCP"
+    runs-on: ubuntu-latest
+    environment: 'PreProd'
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - id: auth
+        uses: google-github-actions/auth@v0.4.0
+        with:
+          token_format: "access_token"
+          create_credentials_file: true
+          activate_credentials_file: true
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_POOL_ID }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.3.0
+      - name: Create API bundle
+        run: zip -r proxy.zip apiproxy
+      - name: Upload API Proxy Bundle
+        id: upload
+        run: "echo \"::set-output name=apigee-revision::$(curl --fail -X POST -H \"Content-Type: multipart/form-data\" -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\" -F \"file=@proxy.zip\" \"https://apigee.googleapis.com/v1/organizations/${{secrets.APIGEE_ORG}}/apis?action=import&name=hello-world\" --silent | jq --raw-output .revision)\""
+      - name: Deploy Revision
+        run: "curl --fail -X POST -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\" \"https://apigee.googleapis.com/v1/organizations/${{ secrets.GCP_APIGEE_ORG }}/environments/eval/apis/hello-world/revisions/${{steps.upload.outputs.apigee-revision}}/deployments?override=true\""
+
 
   # deploy-prod:
   #   runs-on: 'ubuntu-latest'
