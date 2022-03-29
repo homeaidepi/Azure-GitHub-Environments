@@ -9,6 +9,7 @@ env:
   DOTNET_VERSION: '3.1.404'
 
 jobs:
+  name: "Build .NET Core and Publish PoC Alpha"
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
@@ -37,6 +38,7 @@ jobs:
           path: './app/published-app'
           credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
+  name: "Deploy to PreProd Env PoC Alpha"
   deploy-preprod:
     runs-on: 'ubuntu-latest'
     environment: 'PreProd'
@@ -58,10 +60,10 @@ jobs:
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: './published-app'
 
-      - name: Send chat ops msg to teams
+      - name: Send chat ops notification to teams
         uses: dhollerbach/actions.send-message-to-ms-teams@1.0.10
         with:
-          webhook: ${{ secrets.TEAMS_WEBHOOK }}'
+          webhook: ${{ secrets.TEAMS_WEBHOOK }}
           message: 'Deployment Completed for commit: ${{ github.sha }}'
 
   # deploy-prod:
