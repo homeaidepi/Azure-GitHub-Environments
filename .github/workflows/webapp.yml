@@ -84,8 +84,8 @@ jobs:
           service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v0.3.0
-      - name: Create API bundle
-        run: zip -r proxy.zip apiproxy
+      - name: Create API bundle from apigee/apiproxy
+        run: zip -r proxy.zip apigee/apiproxy
       - name: Upload API Proxy Bundle
         id: upload
         run: "echo \"::set-output name=apigee-revision::$(curl --fail -X POST -H \"Content-Type: multipart/form-data\" -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\" -F \"file=@proxy.zip\" \"https://apigee.googleapis.com/v1/organizations/${{secrets.APIGEE_ORG}}/apis?action=import&name=hello-world\" --silent | jq --raw-output .revision)\""
