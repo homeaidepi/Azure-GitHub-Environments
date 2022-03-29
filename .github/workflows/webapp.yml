@@ -77,12 +77,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: 'Authenticate to GCP'
-        uses: 'google-github-actions/auth@v0.3.1'
+        uses: google-github-actions/auth@v0.4.0
         with:
-            token_format: "access_token"
-            create_credentials_file: true
-            workload_identity_provider:  ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-            service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          token_format: "access_token"
+          create_credentials_file: true
+          workload_identity_provider:  ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
       - name: Set up Cloud SDK
         uses: 'google-github-actions/setup-gcloud@v0'
       - name: Create API bundle from apiproxy
