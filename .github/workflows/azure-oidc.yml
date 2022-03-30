@@ -1,14 +1,21 @@
-name: Run Azure Login with OpenID Connect and PowerShell
+name: Run Azure Login with OIDC
 on: [push]
 
 permissions:
       id-token: write
       contents: read
-      
 jobs: 
-  steps:
-  - name: Sample Azure action
-    with: # Set Azure credentials secret as an input
-      credentials: ${{ secrets.AZURE_CREDENTIALS }}
-    env: # Or as an environment variable
-      credentials: ${{ secrets.AZURE_CREDENTIALS }}
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Az CLI login'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  
+      - name: 'Run az commands'
+        run: |
+          az account show
+          az group list
