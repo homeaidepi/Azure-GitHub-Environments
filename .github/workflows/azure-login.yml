@@ -8,7 +8,7 @@ permissions:
 jobs: 
   Windows-latest:
       runs-on: windows-latest
-      
+      environment: 'PreProd'
       # Steps represent a sequence of tasks that will be executed as part of the job
       steps:
       
@@ -21,6 +21,6 @@ jobs:
 
       # Log in to Azure
       - name: Azure Login
-        uses: azure/login@v1
+        uses: azure/actions/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}      
+          creds: ${{secrets.AZURE_CREDENTIALS}}      
