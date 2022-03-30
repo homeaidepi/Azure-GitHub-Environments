@@ -10,7 +10,7 @@ jobs:
       runs-on: windows-2022
       steps:
         - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
-          uses: azure/login@v1
+          uses: azure/actions/login@v1
           with:
             client-id: ${{ secrets.AZURE_CLIENT_ID }}
             tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -22,4 +22,4 @@ jobs:
           with:
              inlineScript: |
                Get-AzResourceGroup
-             azPSVersion: "2022"
+             azPSVersion: "latest"
